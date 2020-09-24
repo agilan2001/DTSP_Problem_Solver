@@ -1,0 +1,370 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.2.0/math.min.js"
+        integrity="sha512-4VdpCxbABk7wjJb/9z/d3EyibeHwUY0FgHbFO4EiIPVtyyV6llhENCvzRk8SH5D86+Jwm6QLagqRRnEJCd3gJg=="
+        crossorigin="anonymous"></script>
+</head>
+
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table tr,
+    td {
+        border: 1px solid;
+        height: 50px;
+        width: 50px;
+        vertical-align: bottom;
+        text-align: center;
+    }
+
+    #t423,
+    #t434,
+    #t463,
+    #t474,
+    #t427,
+    #t438,
+    #t449,
+    #t45A,
+    #t447,
+    #t458,
+    #t469,
+    #t47A {
+        background: linear-gradient(to top right, white, 49%, black, 50%, white, 51%, transparent);
+    }
+
+    #t433,
+    #t424,
+    #t473,
+    #t464,
+    #t457,
+    #t448,
+    #t439,
+    #t44A,
+    #t477,
+    #t468,
+    #t459,
+    #t477A,
+    #t42A {
+        background: linear-gradient(to bottom right, white, 49%, black, 50%, white, 51%, transparent);
+    }
+</style>
+
+<body>
+    <select id="sel_opt" onchange="option_change()">
+        <option value="dit4">DIT FFT : 4 point</option>
+        <option value="dit8">DIT FFT : 8 point</option>
+        <option value="diti4">DIT IFFT : 4 point</option>
+        <option value="diti8">DIT IFFT : 8 point</option>
+    </select><br>
+    <input id="inr1" type="number" /> + i <input type="number" id="ini1" /><br>
+    <input id="inr2" type="number" /> + i <input type="number" id="ini2" /><br>
+    <input id="inr3" type="number" /> + i <input type="number" id="ini3" /><br>
+    <input id="inr4" type="number" /> + i <input type="number" id="ini4" /><br>
+    <div id="ex8" style="display: none;">
+        <input id="inr5" type="number" /> + i <input type="number" id="ini5" /><br>
+        <input id="inr6" type="number" /> + i <input type="number" id="ini6" /><br>
+        <input id="inr7" type="number" /> + i <input type="number" id="ini7" /><br>
+        <input id="inr8" type="number" /> + i <input type="number" id="ini8" /><br>
+    </div>
+    <input type="button" value="CALC" onclick="calc()"><br>
+    <div id="res_div">
+        <table>
+            <tr>
+                <td id="t411"></td>
+                <td id="t412"></td>
+                <td id="t413"></td>
+                <td id="t414"></td>
+                <td id="t415"></td>
+                <td id="t416"></td>
+                <td id="t417"></td>
+                <td id="t418"></td>
+                <td id="t419"></td>
+                <td id="t41A"></td>
+                <td id="t41B"></td>
+            </tr>
+            <tr>
+                <td id="t421"></td>
+                <td id="t422"></td>
+                <td id="t423"></td>
+                <td id="t424"></td>
+                <td id="t425"></td>
+                <td id="t426"></td>
+                <td id="t427"></td>
+                <td id="t428"></td>
+                <td id="t429"></td>
+                <td id="t42A"></td>
+                <td id="t42B"></td>
+            </tr>
+            <tr>
+                <td id="t431"></td>
+                <td id="t432"></td>
+                <td id="t433"></td>
+                <td id="t434"></td>
+                <td id="t435"></td>
+                <td id="t436"></td>
+                <td id="t437"></td>
+                <td id="t438"></td>
+                <td id="t439"></td>
+                <td id="t43A"></td>
+                <td id="t43B"></td>
+            </tr>
+            <tr>
+                <td id="t441"></td>
+                <td id="t442"></td>
+                <td id="t443"></td>
+                <td id="t444"></td>
+                <td id="t445"></td>
+                <td id="t446"></td>
+                <td id="t447"></td>
+                <td id="t448"></td>
+                <td id="t449"></td>
+                <td id="t44A"></td>
+                <td id="t44B"></td>
+            </tr>
+            <tr>
+                <td id="t451"></td>
+                <td id="t452"></td>
+                <td id="t453"></td>
+                <td id="t454"></td>
+                <td id="t455"></td>
+                <td id="t456"></td>
+                <td id="t457"></td>
+                <td id="t458"></td>
+                <td id="t459"></td>
+                <td id="t45A"></td>
+                <td id="t45B"></td>
+            </tr>
+            <tr>
+                <td id="t461"></td>
+                <td id="t462"></td>
+                <td id="t463"></td>
+                <td id="t464"></td>
+                <td id="t465"></td>
+                <td id="t466"></td>
+                <td id="t467"></td>
+                <td id="t468"></td>
+                <td id="t469"></td>
+                <td id="t46A"></td>
+                <td id="t46B"></td>
+            </tr>
+            <tr>
+                <td id="t471"></td>
+                <td id="t472"></td>
+                <td id="t473"></td>
+                <td id="t474"></td>
+                <td id="t475"></td>
+                <td id="t476"></td>
+                <td id="t477"></td>
+                <td id="t478"></td>
+                <td id="t479"></td>
+                <td id="t47A"></td>
+                <td id="t47B"></td>
+            </tr>
+            <tr>
+                <td id="t481"></td>
+                <td id="t482"></td>
+                <td id="t483"></td>
+                <td id="t484"></td>
+                <td id="t485"></td>
+                <td id="t486"></td>
+                <td id="t487"></td>
+                <td id="t488"></td>
+                <td id="t489"></td>
+                <td id="t48A"></td>
+                <td id="t48B"></td>
+            </tr>
+        </table>
+    </div>
+    <div id='res_div2'>
+
+    </div>
+</body>
+<script>
+    function dit_2(c1, c2, w) {
+        return (
+            {
+                r1: math.add(c1, math.multiply(c2, w)),
+                r2: math.add(c1, math.multiply(math.multiply(c2, -1), w)),
+            }
+        );
+    }
+    function dit_4(c1, c2, c3, c4, w1, w2) {
+        var s1 = dit_2(c1, c3, w1);
+        var s2 = dit_2(c2, c4, w2);
+        return (
+            {
+                r1: s1.r1,
+                r2: s2.r1,
+                r3: s1.r2,
+                r4: s2.r2,
+            }
+        );
+    }
+    function dit_8(c1, c2, c3, c4, c5, c6, c7, c8, w1, w2, w3, w4) {
+        var s1 = dit_2(c1, c5, w1);
+        var s2 = dit_2(c2, c6, w2);
+        var s3 = dit_2(c3, c7, w3);
+        var s4 = dit_2(c4, c8, w4);
+        return (
+            {
+                r1: s1.r1,
+                r2: s2.r1,
+                r3: s3.r1,
+                r4: s4.r1,
+                r5: s1.r2,
+                r6: s2.r2,
+                r7: s3.r2,
+                r8: s4.r2,
+            }
+        );
+    }
+
+    function option_change() {
+        if (sel_opt.value == "dit4" || sel_opt.value == "diti4") {
+            ex8.style.display = "none"
+            res_div.style.display = "block"
+            
+        }
+
+        else {
+            ex8.style.display = "block"
+            res_div.style.display = "none"
+            res_div2.innerHTML="";
+        }
+
+
+    }
+
+    function calc() {
+        var inr = [];
+        for (i = 0; i < 8; i++) {
+            inr[i] = math.complex(document.getElementById("inr" + (i + 1)).value, document.getElementById("ini" + (i + 1)).value);
+        }
+
+        if (sel_opt.value == "dit4" || sel_opt.value == "diti4") {
+            if (sel_opt.value == "diti4") {
+                for (i = 0; i < 4; i++) {
+                    inr[i] = math.conj(inr[i]);
+                }
+            }
+
+            res_div.style.display = 'block';
+
+            res_div2.innerHTML = "";
+
+
+            w11 = 1;
+            w21 = 1;
+            w22 = math.complex(0, -1);
+            t411.innerHTML = inr[0].format(4);
+            t431.innerHTML = inr[2].format(4);
+            t451.innerHTML = inr[1].format(4);
+            t471.innerHTML = inr[3].format(4);
+
+
+            t432.innerHTML = "1";
+            t433.innerHTML = "-1";
+            t472.innerHTML = "1";
+            t473.innerHTML = "-1";
+
+            s1 = dit_2(inr[0], inr[2], w11);
+            t415.innerHTML = s1.r1.format(4);
+            t435.innerHTML = s1.r2.format(4);
+
+            s2 = dit_2(inr[1], inr[3], w11);
+            t455.innerHTML = s2.r1.format(4);
+            t475.innerHTML = s2.r2.format(4);
+
+            t456.innerHTML = "1";
+            t457.innerHTML = "-1";
+
+            t476.innerHTML = "-i";
+            t477.innerHTML = "-1";
+
+            s21 = dit_4(s1.r1, s1.r2, s2.r1, s2.r2, w21, w22);
+            t41B.innerHTML = s21.r1.format(4);
+            t43B.innerHTML = s21.r2.format(4);
+            t45B.innerHTML = s21.r3.format(4);
+            t47B.innerHTML = s21.r4.format(4);
+
+
+        }
+        else if (sel_opt.value == "dit8" || sel_opt.value == "diti8") {
+            if (sel_opt.value == "diti8") {
+                for (i = 0; i < 8; i++) {
+                    inr[i] = math.conj(inr[i]);
+                }
+            }
+            res_div.style.display = 'none';
+
+            res_div2_txt = "";
+
+            w11 = 1;
+
+            w21 = 1;
+            w22 = math.complex(0, -1);
+
+            w31 = 1;
+            w32 = math.complex(0.707, -0.707);
+            w33 = math.complex(0, -1);
+            w34 = math.complex(-0.707, -0.707);
+
+            res_div2_txt += "<br><br><br><u>Twiddle Factors</u><br>";
+            res_div2_txt += "Stage 1 : " + w11 + "<br>" + "Stage 2: " + w21 + " , " + w22.format(4) + "<br>" + "Stage 3: " + w31 + " , " + w32.format(4) + " , " + w33.format(4) + " , " + w34.format(4);
+
+            res_div2_txt += "<br><br><u>Stage 1</u><br>";
+            res_div2_txt += "Inputs : <pre>";
+            [0, 4, 2, 6, 1, 5, 3, 7].forEach((e, i) => {
+                res_div2_txt += `  ${inr[e].format(4)}   `;
+            })
+            res_div2_txt += "</pre>";
+
+            var s1 = [];
+            res_div2_txt += "<br>Outputs : <pre>";
+            [[0, 4], [2, 6], [1, 5], [3, 7]].forEach((e, i) => {
+                var t = dit_2(inr[e[0]], inr[e[1]], w11);
+                s1.push(t.r1, t.r2);
+                res_div2_txt += `  ${t.r1.format(4)}   ${t.r2.format(4)}  `;
+            })
+
+            res_div2_txt += "</pre>";
+
+            res_div2_txt += "<br><br><u>Stage 2</u><br>";
+
+            var s2 = [];
+            res_div2_txt += "<br>Outputs : <pre>";
+
+            var p = dit_4(s1[0], s1[1], s1[2], s1[3], w21, w22);
+            s2.push(p.r1, p.r2, p.r3, p.r4);
+
+            var q = dit_4(s1[4], s1[5], s1[6], s1[7], w21, w22);
+            s2.push(q.r1, q.r2, q.r3, q.r4);
+            s2.forEach((e, i) => {
+                res_div2_txt += `  ${e.format(4)}  `;
+            })
+
+            res_div2_txt += "</pre>";
+
+            res_div2_txt += "<br><br><u>Stage 3</u><br>";
+
+            var s3 = [];
+            res_div2_txt += "<br>Outputs : <pre>";
+
+            var x = dit_8(...s2, w31, w32, w33, w34);
+
+            Object.keys(x).forEach((e, i) => {
+                res_div2_txt += `   ${x[e].format(4)}  `;
+            })
+            res_div2_txt += "</pre>";
+
+            res_div2.innerHTML = res_div2_txt;
+
+
+        }
+    }
+</script>
+
+</html>
