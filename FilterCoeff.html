@@ -1,0 +1,133 @@
+<html>
+<head>
+    <title>Filter Coefficients</title>
+</head>
+<style>
+    input{
+        width:100px;
+        margin:10px;
+    }
+</style>
+<body>
+    <h1>Linear Phase Filter Coefficients Calculator</h1>
+    <select id="fil_type" onchange="fil_change()">
+        <option value="lpf">LPF</option>
+        <option value="hpf">HPF</option>
+        <option value="bpf">BPF</option>
+        <option value="bsf">BSF</option>
+    </select>
+    <select id="wind">
+        <option value="rec">RECTANGULAR</option>
+        <option value="han">HANN</option>
+        <option value="ham">HAMMING</option>
+        <option value="bar">BARKLETT</option>
+        <option value="bla">BLACKMAN</option>
+    </select>
+    <br>
+    N  : <input type="number" id="num" /><br>
+    w1 :<input type="number" id="wi1" /><br>
+    <span id="w2_span">w2 :<input type="number" id="wi2" /><br></span>
+    <button onclick="calc()">CALC</button>
+    <div id="res"></div>
+    <script>
+        fil_change();
+        var hd = []; var w=[]; var h=[];
+        function calc() {
+            var n = parseInt(num.value);
+            var w1 = wi1.value; var w2 = wi2.value;
+            
+            if (fil_type.value == "lpf") {
+                for (i = 0; i <= (n - 3) / 2; i++) {
+                    hd[i] = (Math.sin((i - (n - 1) / 2) * w1)) / (Math.PI * (i - (n - 1) / 2));
+                }
+                hd[i]=w1/Math.PI;
+            } 
+            else if (fil_type.value == "hpf") {
+                for (i = 0; i <= (n - 3) / 2; i++) {
+                    hd[i] = (Math.sin((i - (n - 1) / 2) * Math.PI)-Math.sin((i - (n - 1) / 2) * w1)) / (Math.PI * (i - (n - 1) / 2));
+                }
+                hd[i]=1-w1/Math.PI;
+            }
+            else if (fil_type.value == "bpf") {
+                for (i = 0; i <= (n - 3) / 2; i++) {
+                    hd[i] = (Math.sin((i - (n - 1) / 2) * w2)-Math.sin((i - (n - 1) / 2) * w1)) / (Math.PI * (i - (n - 1) / 2));
+                }
+                hd[i]=(w2-w1)/Math.PI;
+            }
+            else if (fil_type.value == "bsf") {
+                for (i = 0; i <= (n - 3) / 2; i++) {
+                    hd[i] = (Math.sin((i - (n - 1) / 2) * w1)-Math.sin((i - (n - 1) / 2) * w2)+Math.sin((i - (n - 1) / 2) * Math.PI)) / (Math.PI * (i - (n - 1) / 2));
+                }
+                hd[i]=1+(w1-w2)/Math.PI;
+            }
+
+            if(wind.value=="rec"){
+                for (i = 0; i <= (n - 1) / 2; i++) {
+                    w[i] = 1;
+                }
+            
+            }
+            else if(wind.value=="han"){
+                for (i = 0; i <= (n - 1) / 2; i++) {
+                    w[i] = 0.5-0.5*Math.cos(2*Math.PI*i/(n-1));
+                }                
+            }
+            else if(wind.value=="ham"){
+                for (i = 0; i <= (n - 1) / 2; i++) {
+                    w[i] = 0.54-0.46*Math.cos(2*Math.PI*i/(n-1));
+                }                
+            }
+            else if(wind.value=="bar"){
+                for (i = 0; i <= (n - 1) / 2; i++) {
+                    w[i] = 2*i/(n-1);
+                }                
+            }
+            else if(wind.value=="bla"){
+                for (i = 0; i <= (n - 1) / 2; i++) {
+                    w[i] = 0.42-0.5*Math.cos(2*Math.PI*i/(n-1))+0.08*Math.cos(4*Math.PI*i/(n-1));
+                }                
+            }
+            hd.forEach((e,i)=>{
+                h[i]=e*w[i];
+            })
+            var rel="";
+            rel+="<u>hd(n) :</u><br>";
+            hd.forEach((e,i)=>{
+                rel+="hd["+i+"] = "+e.toFixed(4)+"<br>";
+            })
+
+            rel+="<br><br><u>w(n) :</u><br>";
+            w.forEach((e,i)=>{
+                rel+="w["+i+"] = "+e.toFixed(4)+"<br>";
+            })
+
+            rel+="<br><br><u>h(n) :</u><br>";
+            h.forEach((e,i)=>{
+                rel+="h["+i+"] = "+e.toFixed(4)+"<br>";
+            })
+
+            rel+="<br><b>MAGNITUDE of H(w)</b><br>";
+            rel+=h[(n-1)/2].toFixed(4);
+            for(p=0;p<=(n-3)/2;p++){
+                var t = 2*h[p].toFixed(4);
+                rel+=` ${Math.sign(t)==-1?"":"+"} `+t + " cos("+((n-1)/2-p)+"w)";
+            }
+
+
+            res.innerHTML=rel;
+
+        }
+
+        function fil_change(){
+            if(fil_type.value=="bpf" || fil_type.value=="bsf"){
+                w2_span.style.display="inline";
+            }else{
+                w2_span.style.display="none";
+            }
+                
+
+        }
+    </script>
+</body>
+
+</html>
