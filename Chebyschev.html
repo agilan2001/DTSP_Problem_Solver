@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+  <title>Chebyschev-Filter-Design</title>
+  <meta name="viewport" content="width = device-width,maximum-scale=1,user-scalable=no">
+</head>
+
+<body>
+  <b><div style= "text-align: center">Chebyschev Filter</div></b>
+   <br />
+   Omega_p:
+   <br />
+   <input  id="omega_p" type ="number" placeholder=" in rad/s" ><br><br>
+   Omega_s:
+   <br />
+   <input  id="omega_s" type = "number" placeholder="in rad/s"><br><br>
+   Del_p:
+   <br />
+   <input   id="del_p" type = "number" placeholder="Not in dB"><br><br>
+   Del_s:
+   <br>
+   <input   id="del_s" type = "number" placeholder="Not in dB"><br><br> 
+   <button onclick ="calc()">Design</button>
+   <p id="N"></p><br>
+   <p id="epsilon"></p><br>
+   <p id="yn"></p><br>
+   <p>The C values are</p>
+   <p id ="c"></p><br>
+   <p>The B values are</p>
+   <p id ="b"></p>
+
+</body>
+  <script>
+  function calc(){
+   document.getElementById("b").innerHTML="";
+    document.getElementById("c").innerHTML="";
+  var omega_p =  parseFloat( document.getElementById("omega_p").value);
+  var omega_s =  parseFloat(document.getElementById("omega_s").value);
+   var del_s =  parseFloat(document.getElementById("del_s").value);
+    var del_p =  parseFloat(document.getElementById("del_p").value);
+
+  var N;
+  N = Math.acosh(Math.sqrt((Math.pow(del_s,-2) - 1)/(Math.pow(del_p,-2)- 1)))/Math.acosh(omega_s/omega_p);
+  document.getElementById("N").innerHTML ="N="+ N;
+  N = Math.ceil(N);
+  var epsilon =  parseFloat(Math.sqrt(Math.pow(del_p,-2)-1));
+  document.getElementById("epsilon").innerHTML ="epsilon ="+ epsilon;
+  var e =  parseFloat(Math.sqrt(1+Math.pow(epsilon,-2)));
+  var yn = parseFloat((Math.pow(e+Math.pow(epsilon,-1),parseFloat(1/N))-(Math.pow(e+Math.pow(epsilon,-1),parseFloat(-1/N))))*(1/2));
+  document.getElementById("yn").innerHTML ="yn ="+ yn;
+  var c =0,b =0;
+           var x = document.createElement("li");
+           var t = document.createTextNode( parseFloat(yn));
+           x.appendChild(t);
+           document.getElementById("c").appendChild(x);
+  var k;
+  if (N%2==0)
+     k=parseInt(N/2);
+     else
+     k=parseInt((N-1)/2);
+   for(i=1;i<=k;i++)
+   {
+
+       c = Math.pow(yn,2)+Math.pow(Math.cos((2*i-1)*3.14/(2*N)),2);
+
+       b =2*yn*Math.sin((2*i-1)*3.14/(2*N));
+       var x = document.createElement("li");
+           var t = document.createTextNode(parseFloat(c));
+           x.appendChild(t);
+           document.getElementById("c").appendChild(x);
+       var x = document.createElement("li");
+           var t = document.createTextNode(parseFloat(b));
+           x.appendChild(t);
+           document.getElementById("b").appendChild(x);
+   }
+   if(b==0)
+   {
+       var x = document.createElement("li");
+           var t = document.createTextNode("No b values");
+           x.appendChild(t);
+           document.getElementById("b").appendChild(x);
+   }
+   
+
+   }
+  </script>
+  <!-- done by sundar -->
+   <!-- All the best -->
+</html>
